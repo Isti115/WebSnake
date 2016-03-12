@@ -1,3 +1,9 @@
 body {
   font-family: "Courier New", Courier, monospace;
 }
+
+.snake-body {
+  background-color: green;
+  
+  /*transition: all 0.5s;*/
+}
