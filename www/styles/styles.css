@@ -1,3 +1,12 @@
 body {
   font-family: "Courier New", Courier, monospace;
 }
+
+canvas {
+  width: 640px;
+  height: 480px;
+  
+  border-style: solid;
+  border-width: 3px;
+  border-color: green;
+}
