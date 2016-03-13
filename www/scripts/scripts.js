@@ -8,10 +8,13 @@ var tileSize = 32;
 
 var obstacleCount = 4;
 
-var stepDelay;
-
 var hudDrawer, arenaDrawer;
 var field, snake;
+
+var stepDelay = 200;
+var mainInterval;
+
+var dieded = false;
 
 function init() {
   canvas = document.getElementById("gameCanvas");
@@ -27,11 +30,13 @@ function init() {
   arenaDrawer = new TileDrawer(context, 0, 32, 32);
   
   field = new Field(width / tileSize, (height - arenaDrawer.offsetY) / tileSize, obstacleCount);
-  field.generateObstacles(obstacleCount);
-  field.loadImages();
-  
   snake = new Snake();
+  
+  field.loadImages();
   snake.loadImages();
+  
+  field.generateObstacles(obstacleCount);
+  field.generateFood();
 
   imageLoader.processQueue(start);
 }
@@ -41,7 +46,7 @@ function start() {
   
   draw();
   
-  setInterval(main, 200);
+  mainInterval = setInterval(main, stepDelay);
 }
 
 function main() {
@@ -64,4 +69,8 @@ function draw() {
   
   field.draw();
   snake.draw();
+  
+  if (dieded) {
+    context.fillText(`dieded: ${snake.length - 4}`, 100, 100);
+  }
 }

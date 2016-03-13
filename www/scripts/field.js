@@ -24,6 +24,30 @@ class Field {
     }
   }
   
+  generateFood() {
+    delete this.food;
+    
+    while (!this.food) {
+      var currentFoodX = Math.floor(Math.random() * this.width);
+      var currentFoodY = Math.floor(Math.random() * this.height);
+      var currentFood = new Position(currentFoodX, currentFoodY);
+      
+      var collides = false;
+      
+      for (var i = 0; i < this.obstacles.length && !collides; i++) {
+        collides = this.obstacles[i].equals(currentFood);
+      }
+      
+      for (var i = 0; i < snake.positions.length && !collides; i++) {
+        collides = snake.positions[i].equals(currentFood);
+      }
+      
+      if (!collides) {
+        this.food = currentFood;
+      }
+    }
+  }
+  
   loadImages() {
     this.images = {};
     
@@ -40,9 +64,11 @@ class Field {
     
   }
   
-  draw(context) {
+  draw() {
     for (var currentObstacle of this.obstacles) {
       arenaDrawer.drawTile(this.images.obstacle, currentObstacle.x, currentObstacle.y);
     }
+    
+    arenaDrawer.drawTile(this.images.food, this.food.x, this.food.y, 180);
   }
 }

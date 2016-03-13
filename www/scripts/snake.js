@@ -58,20 +58,52 @@ class Snake {
   }
   
   update() {
+    // Updating direction
+    
     if (this.updatedDirection) {
       this.direction = this.updatedDirection;
       delete this.updatedDirection;
     }
     
+    var headPosition = this.positions[this.positions.length - 1];
+    
+    // Checking for collision
+    
+    var nextHeadPosition = Position.add(headPosition, this.direction);
+    
+    var collides = false;
+    
+    for (var i = 0; i < field.obstacles.length && !collides; i++) {
+      collides = field.obstacles[i].equals(nextHeadPosition);
+    }
+    for (var i = 0; i < this.positions.length && !collides; i++) {
+      collides = this.positions[i].equals(nextHeadPosition);
+    }
+    
+    if (collides) {
+      clearInterval(mainInterval);
+      dieded = true;
+      return;
+    }
+    
+    // Growing
+    
     if (this.length > this.positions.length) {
       this.positions.unshift(new Position(0, 0));
     }
+    
+    // Moving
     
     for (var i = 0; i < this.positions.length - 1; i++) {
       this.positions[i].moveTo(this.positions[i + 1]);
     }
     
-    this.positions[this.positions.length - 1].move(this.direction);
+    headPosition.move(this.direction);
+    
+    if (headPosition.equals(field.food)) {
+      this.length++;
+      field.generateFood();
+    }
   }
   
   draw() {
@@ -127,7 +159,6 @@ class Snake {
         Position.getRotation(neckPosition, headPosition)
       );
     } else {
-      console.log("neckturn");
       arenaDrawer.drawTile(
         this.images.neckTurn,
         ...neckPosition.toArray(),
