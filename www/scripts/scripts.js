@@ -27,14 +27,14 @@ function init() {
   hudDrawer = new TileDrawer(context, 0, 0, 32);
   arenaDrawer = new TileDrawer(context, 0, 32, 32);
   
-  field = new Field(width / tileSize, height / tileSize, obstacleCount);
-  snake = new Snake();
-  
+  field = new Field(width / tileSize, (height - arenaDrawer.offsetY) / tileSize, obstacleCount);
+  field.generateObstacles(obstacleCount);
   field.loadImages();
+  
+  snake = new Snake();
   snake.loadImages();
   
   untitled = imageLoader.queueImage("images/Untitled.png");
-  var untitled2 = imageLoader.queueImage("images/Untitled.png");
   imageLoader.processQueue(start);
 }
 
@@ -44,13 +44,24 @@ function start() {
   // arenaDrawer.drawTile(untitled, 10, 10);
   
   field.draw();
+  snake.draw();
+  
+  setInterval(main, 500);
+}
+
+function main() {
+  update();
+  draw();
 }
 
 function update() {
-  field.draw();
-  snake.draw();
+  snake.update();
+  field.update();
 }
 
 function draw() {
   context.clearRect(0, 0, width, height);
+  
+    field.draw();
+    snake.draw();
 }

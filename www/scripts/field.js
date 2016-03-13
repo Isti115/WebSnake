@@ -1,30 +1,39 @@
-class Position {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-}
-
 class Field {
-  constructor(width, height, obstacleCount) {
-    this.obstacles = [];
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
     
-    for (var i = 0; i < obstacleCount; i++) {
-      var currentObstacleX = Math.floor(Math.random() * width);
-      var currentObstacleY = Math.floor(Math.random() * height);
-      this.obstacles.push(new Position(currentObstacleX, currentObstacleY));
+    this.obstacles = [];
+  }
+  
+  generateObstacles(obstacleCount) {
+    while (this.obstacles.length < obstacleCount) {
+      var currentObstacleX = Math.floor(Math.random() * this.width);
+      var currentObstacleY = Math.floor(Math.random() * this.height);
+      var currentObstacle = new Position(currentObstacleX, currentObstacleY);
+      
+      var collides = false;
+      
+      for (var i = 0; i < this.obstacles.length && !collides; i++) {
+        collides = this.obstacles[i].equals(currentObstacle);
+      }
+      
+      if (!collides) {
+        this.obstacles.push(currentObstacle);
+      }
     }
   }
   
   loadImages() {
     this.images = {};
     
-    this.images.obstacle     = imageLoader.queueImage("images/Untitled.png");
-    this.images.neck     = imageLoader.queueImage("images/Untitled.png");
-    this.images.neckTurn = imageLoader.queueImage("images/Untitled.png");
-    this.images.body     = imageLoader.queueImage("images/Untitled.png");
-    this.images.bodyTurn = imageLoader.queueImage("images/Untitled.png");
-    this.images.tail     = imageLoader.queueImage("images/Untitled.png");
+    this.images.obstacle = imageLoader.queueImage("images/Untitled.png");
+    this.images.food     = imageLoader.queueImage("images/Untitled.png");
+    this.images.scroll   = imageLoader.queueImage("images/Untitled.png");
+  }
+  
+  update() {
+    
   }
   
   draw(context) {
