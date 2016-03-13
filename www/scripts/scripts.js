@@ -13,9 +13,6 @@ var stepDelay;
 var hudDrawer, arenaDrawer;
 var field, snake;
 
-
-var untitled;
-
 function init() {
   canvas = document.getElementById("gameCanvas");
   
@@ -23,6 +20,8 @@ function init() {
   canvas.height = height;
   
   context = canvas.getContext("2d");
+  
+  window.addEventListener("keydown", keyDown, false);
   
   hudDrawer = new TileDrawer(context, 0, 0, 32);
   arenaDrawer = new TileDrawer(context, 0, 32, 32);
@@ -33,20 +32,16 @@ function init() {
   
   snake = new Snake();
   snake.loadImages();
-  
-  untitled = imageLoader.queueImage("images/Untitled.png");
+
   imageLoader.processQueue(start);
 }
 
 function start() {
-  console.log("started");
+  console.log("%cImages loaded -> Game started.", "color:green;font-size:20px;");
   
-  // arenaDrawer.drawTile(untitled, 10, 10);
+  draw();
   
-  field.draw();
-  snake.draw();
-  
-  setInterval(main, 500);
+  setInterval(main, 200);
 }
 
 function main() {
@@ -54,14 +49,19 @@ function main() {
   draw();
 }
 
+function keyDown(e) {
+  field.keyDown(e);
+  snake.keyDown(e);
+}
+
 function update() {
-  snake.update();
   field.update();
+  snake.update();
 }
 
 function draw() {
   context.clearRect(0, 0, width, height);
   
-    field.draw();
-    snake.draw();
+  field.draw();
+  snake.draw();
 }

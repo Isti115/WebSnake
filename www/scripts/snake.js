@@ -1,18 +1,27 @@
+var directions = {
+  "up": new Position(0, -1),
+  "down": new Position(0, 1),
+  "left": new Position(-1, 0),
+  "right": new Position(1, 0)
+};
+
 class Snake {
   constructor(field) {
-    this.direction = new Position(1, 0);
+    this.direction = directions.right;
     
     this.positions = [];
     
-    this.positions.push(new Position(0, 5));
-    this.positions.push(new Position(1, 5));
-    this.positions.push(new Position(2, 5));
-    this.positions.push(new Position(3, 5));
+    // this.positions.push(new Position(0, 5));
+    // this.positions.push(new Position(1, 5));
+    // this.positions.push(new Position(2, 5));
+    // this.positions.push(new Position(3, 5));
     
-    // this.positions.push(new Position(-3, 5));
-    // this.positions.push(new Position(-2, 5));
-    // this.positions.push(new Position(-1, 5));
-    // this.positions.push(new Position( 0, 5));
+    this.length = 4;
+    
+    this.positions.push(new Position(-3, 5));
+    this.positions.push(new Position(-2, 5));
+    this.positions.push(new Position(-1, 5));
+    this.positions.push(new Position( 0, 5));
   }
   
   loadImages() {
@@ -28,7 +37,36 @@ class Snake {
     this.images.head        = imageLoader.queueImage("images/Untitled.png");
   }
   
+  keyDown(e) {
+    if (e.keyCode == 38) {
+      if (this.direction.y == 0) {
+        this.updatedDirection = directions.up;
+      }
+    } else if (e.keyCode == 40) {
+      if (this.direction.y == 0) {
+        this.updatedDirection = directions.down;
+      }
+    } else if (e.keyCode == 37) {
+      if (this.direction.x == 0) {
+        this.updatedDirection = directions.left;
+      }
+    } else if (e.keyCode == 39) {
+      if (this.direction.x == 0) {
+        this.updatedDirection = directions.right;
+      }
+    }
+  }
+  
   update() {
+    if (this.updatedDirection) {
+      this.direction = this.updatedDirection;
+      delete this.updatedDirection;
+    }
+    
+    if (this.length > this.positions.length) {
+      this.positions.unshift(new Position(0, 0));
+    }
+    
     for (var i = 0; i < this.positions.length - 1; i++) {
       this.positions[i].moveTo(this.positions[i + 1]);
     }
