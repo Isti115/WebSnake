@@ -3,6 +3,8 @@ class Field {
     this.width = width;
     this.height = height;
     
+    this.entrance = Math.floor(this.height / 2);
+    
     this.obstacles = [];
   }
   
@@ -12,7 +14,7 @@ class Field {
       var currentObstacleY = Math.floor(Math.random() * this.height);
       var currentObstacle = new Position(currentObstacleX, currentObstacleY);
       
-      var collides = false;
+      var collides = currentObstacle.y == this.entrance && currentObstacle.x < 5;
       
       for (var i = 0; i < this.obstacles.length && !collides; i++) {
         collides = this.obstacles[i].equals(currentObstacle);
@@ -104,6 +106,12 @@ class Field {
       "lazy"      : imageLoader.queueImage("images/Untitled.png"),
       "voracious" : imageLoader.queueImage("images/Untitled.png")
     };
+  }
+  
+  loadAudio() {
+    this.audio = {};
+    
+    this.audio.start = new Audio("audio/start.mp3");
   }
   
   keyDown(e) {

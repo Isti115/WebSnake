@@ -40,30 +40,22 @@ var effects = {
   },
   "voracious" : function(snake) {
     snake.length += 10;
-  },
-  "clear" : function(snake) {
-    
   }
 };
 
 class Snake {
-  constructor(field) {
+  constructor() {
     this.activeDirections = normalDirections;
     this.direction = this.activeDirections.right;
     
     this.positions = [];
-    
-    // this.positions.push(new Position(0, 5));
-    // this.positions.push(new Position(1, 5));
-    // this.positions.push(new Position(2, 5));
-    // this.positions.push(new Position(3, 5));
-    
-    this.length = 4;
-    
-    this.positions.push(new Position(-3, 5));
-    this.positions.push(new Position(-2, 5));
-    this.positions.push(new Position(-1, 5));
-    this.positions.push(new Position( 0, 5));
+        
+    this.positions.push(new Position(-3, field.entrance));
+    this.positions.push(new Position(-2, field.entrance));
+    this.positions.push(new Position(-1, field.entrance));
+    this.positions.push(new Position( 0, field.entrance));
+
+    this.length = this.positions.length;
     
     this.died = false;
   }
@@ -90,6 +82,23 @@ class Snake {
     this.images.head        = imageLoader.queueImage("images/head.png");
   }
   
+  loadAudio() {
+    this.audio = {};
+    
+    this.audio.eat = new Audio("audio/eat.mp3");
+    
+    this.audio.effects = {
+      "wisdom"    : new Audio("audio/wisdom.mp3"),
+      "mirror"    : new Audio("audio/mirror.mp3"),
+      "reverse"   : new Audio("audio/reverse.mp3"),
+      "greedy"    : new Audio("audio/greedy.mp3"),
+      "lazy"      : new Audio("audio/lazy.mp3"),
+      "voracious" : new Audio("audio/voracious.mp3")
+    };
+    
+    this.audio.end = new Audio("audio/end.mp3");
+  }
+  
   applyEffect(effectName) {
     console.log(`Applying: ${effectName}`);
     this.activeEffect = effectName;
@@ -99,6 +108,11 @@ class Snake {
     this.activeDirections = normalDirections;
     stepDelay = baseStepDelay;
     
+    if (effectName == "clear") {
+      return;
+    }
+    
+    this.audio.effects[effectName].play();
     effects[effectName](this);
   }
   
@@ -168,6 +182,7 @@ class Snake {
     
     if (collides) {
       // clearInterval(mainInterval);
+      this.audio.end.play();
       this.died = true;
       console.log("%cSnek dieded -> Game ended.", "color:red;font-size:20px;");
       return;
@@ -188,6 +203,7 @@ class Snake {
     headPosition.move(this.direction);
     
     if (headPosition.equals(field.food)) {
+      this.audio.eat.play();
       this.length++;
       field.generateFood();
     }

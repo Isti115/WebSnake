@@ -54,11 +54,35 @@ function start() {
   field.loadImages();
   snake.loadImages();
   
+  field.loadAudio();
+  snake.loadAudio();
+  
   field.generateObstacles(obstacleCount);
   field.generateFood();
   field.generateScroll();
 
-  imageLoader.processQueue(begin);
+  imageLoader.processQueue(countdown);
+}
+
+var countdownStatus = 3;
+
+function countdown() {
+  if (countdownStatus == 3) {
+    field.audio.start.play();
+  }
+  
+  context.font = "30px Courier New";
+  context.fillStyle = "#000000";
+  
+  context.clearRect(0, 0, width, height);
+  context.fillText(`Game begins in: ${countdownStatus}`, 10, 25);
+  
+  countdownStatus--;
+  if (countdownStatus >= 0) {
+    setTimeout(countdown, 1000);
+  } else {
+    begin();
+  }
 }
 
 function begin() {
