@@ -64,6 +64,8 @@ class Snake {
     this.positions.push(new Position(-2, 5));
     this.positions.push(new Position(-1, 5));
     this.positions.push(new Position( 0, 5));
+    
+    this.died = false;
   }
   
   loadImages() {
@@ -122,7 +124,7 @@ class Snake {
     // Cheats
     
     if (e.keyCode == 192) {
-      dieded = false;
+      this.died = false;
       
       main();
       // mainInterval = setInterval(main, stepDelay);
@@ -166,7 +168,7 @@ class Snake {
     
     if (collides) {
       // clearInterval(mainInterval);
-      dieded = true;
+      this.died = true;
       console.log("%cSnek dieded -> Game ended.", "color:red;font-size:20px;");
       return;
     }

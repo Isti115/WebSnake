@@ -1,22 +1,55 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Web Snake</title>
-    
-    <link rel="stylesheet" href="styles/styles.css" charset="utf-8">
-    
-    <script src="scripts/tileDrawer.js" charset="utf-8"></script>
-    <script src="scripts/imageLoader.js" charset="utf-8"></script>
-    
-    <script src="scripts/position.js" charset="utf-8"></script>
-    <script src="scripts/field.js" charset="utf-8"></script>
-    <script src="scripts/snake.js" charset="utf-8"></script>
-    
-    <script src="scripts/scripts.js" charset="utf-8"></script>
-  </head>
-  <body>
-    <h1>Web Snake</h1>
+<head>
+  <meta charset="utf-8">
+  <title>Web Snake</title>
+  
+  <link rel="stylesheet" href="styles/styles.css" charset="utf-8">
+  
+  <script src="scripts/tileDrawer.js" charset="utf-8"></script>
+  <script src="scripts/imageLoader.js" charset="utf-8"></script>
+  
+  <script src="scripts/position.js" charset="utf-8"></script>
+  <script src="scripts/field.js" charset="utf-8"></script>
+  <script src="scripts/snake.js" charset="utf-8"></script>
+  
+  <script src="scripts/scripts.js" charset="utf-8"></script>
+</head>
+<body>
+  <h1>Web Snake</h1>
+  <table id="configurationTable">
+    <tr>
+      <td>
+        Width:
+      </td>
+      <td>
+        <input type="number" id="widthInput" name="width" value="10" />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Height:
+      </td>
+      <td>
+        <input type="number" id="heightInput" name="height" value="10" />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Obstacles:
+      </td>
+      <td>
+        <input type="number" id="obstacleCountInput" name="obstacleCount" value="2" />
+      </td>
+    </tr>
+    <tr>
+      <td id="startContainer" colspan="2">
+        <input id="startButton" type="button" name="start" value="Start">
+      </td>
+    </tr>
+  </table>
+  <div id="gameContainer" tabindex="1">
     <canvas id="gameCanvas"></canvas>
-  </body>
+  </div>
+</body>
 </html>

@@ -1,9 +1,31 @@
 body {
   font-family: "Courier New", Courier, monospace;
+  
+  text-align: center;
+}
+
+#configurationTable {
+  margin: 10px auto;
+}
+
+#configurationTable td:nth-child(2n + 1) {
+  text-align: right;
+}
+
+input[type="number"] {
+  width: 40px;
+}
+
+#configurationTable #startContainer {
+  text-align: center;
+}
+
+#gameContainer:focus {
+  outline: none;
 }
 
 canvas {
-  width: 640px;
+  /*width: 640px;*/
   height: 480px;
   
   border-style: solid;
