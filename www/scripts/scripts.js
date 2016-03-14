@@ -81,6 +81,7 @@ function countdown() {
   if (countdownStatus >= 0) {
     setTimeout(countdown, 1000);
   } else {
+    field.audio.background.play();
     begin();
   }
 }

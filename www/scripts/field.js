@@ -111,7 +111,10 @@ class Field {
   loadAudio() {
     this.audio = {};
     
-    this.audio.start = new Audio("audio/start.mp3");
+    this.audio.start      = new Audio("audio/start.mp3");
+    this.audio.background = new Audio("audio/background.mp3");
+    
+    this.audio.background.loop = true;
   }
   
   keyDown(e) {

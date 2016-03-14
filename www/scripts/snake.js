@@ -182,6 +182,7 @@ class Snake {
     
     if (collides) {
       // clearInterval(mainInterval);
+      field.audio.background.pause();
       this.audio.end.play();
       this.died = true;
       console.log("%cSnek dieded -> Game ended.", "color:red;font-size:20px;");
