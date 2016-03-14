@@ -11,6 +11,7 @@ function disableArrows(e) {
 window.addEventListener("keydown", disableArrows, false);
 
 var gameContainer;
+var scoreDisplay;
 var canvas, context;
 
 var width = 640, height = 480;
@@ -20,6 +21,8 @@ var obstacleCount = 4;
 
 var hudDrawer, arenaDrawer;
 var field, snake;
+
+var countdownStatus;
 
 var baseStepDelay = 150;
 var stepDelay = baseStepDelay;
@@ -31,6 +34,7 @@ function init() {
 
 function start() {
   gameContainer = document.getElementById("gameContainer");
+  scoreDisplay = document.getElementById("scoreDisplay");
   canvas = document.getElementById("gameCanvas");
   
   width = parseInt(document.getElementById("widthInput").value) * 32;
@@ -61,10 +65,9 @@ function start() {
   field.generateFood();
   field.generateScroll();
 
+  countdownStatus = 3;
   imageLoader.processQueue(countdown);
 }
-
-var countdownStatus = 3;
 
 function countdown() {
   if (countdownStatus == 3) {
@@ -125,12 +128,13 @@ function draw() {
   context.fillStyle = "#000000";
   
   if (snake.died) {
-    context.fillText(`dieded: ${snake.length - 4}`, 10, 25);
+    scoreDisplay.innerHTML = `End: ${snake.length - 4}`;
   } else {
-    context.fillText(`score: ${snake.length - 4}`, 10, 25);
+    scoreDisplay.innerHTML = `Score: ${snake.length - 4}`;
   }
   
   if (snake.activeEffect) {
-    context.fillText(`| Last effect: ${snake.activeEffect}`, 200, 25);
+    hudDrawer.drawTile(field.images.scrolls[snake.activeEffect], 3.75, 0);
+    context.fillText(`Scroll: ${snake.activeEffect}`, 5, 25);
   }
 }

@@ -63,23 +63,23 @@ class Snake {
   loadImages() {
     this.images = {};
     
-    this.images.tail        = imageLoader.queueImage("images/tail.png");
-    this.images.preTail     = imageLoader.queueImage("images/preTail.png");
+    this.images.tail        = imageLoader.queueImage("images/snake/tail.png");
+    this.images.preTail     = imageLoader.queueImage("images/snake/preTail.png");
     this.images.preTailTurn = {
-                      "-90" : imageLoader.queueImage("images/preTailTurnLeft.png"),
-                       "90" : imageLoader.queueImage("images/preTailTurnRight.png")
+                      "-90" : imageLoader.queueImage("images/snake/preTailTurnLeft.png"),
+                       "90" : imageLoader.queueImage("images/snake/preTailTurnRight.png")
     };
-    this.images.body        = imageLoader.queueImage("images/body.png");
+    this.images.body        = imageLoader.queueImage("images/snake/body.png");
     this.images.bodyTurn    = {
-                      "-90" : imageLoader.queueImage("images/bodyTurnLeft.png"),
-                       "90" : imageLoader.queueImage("images/bodyTurnRight.png")
+                      "-90" : imageLoader.queueImage("images/snake/bodyTurnLeft.png"),
+                       "90" : imageLoader.queueImage("images/snake/bodyTurnRight.png")
     };
-    this.images.neck        = imageLoader.queueImage("images/neck.png");
+    this.images.neck        = imageLoader.queueImage("images/snake/neck.png");
     this.images.neckTurn    = {
-                      "-90" : imageLoader.queueImage("images/neckTurnLeft.png"),
-                       "90" : imageLoader.queueImage("images/neckTurnRight.png")
+                      "-90" : imageLoader.queueImage("images/snake/neckTurnLeft.png"),
+                       "90" : imageLoader.queueImage("images/snake/neckTurnRight.png")
     };
-    this.images.head        = imageLoader.queueImage("images/head.png");
+    this.images.head        = imageLoader.queueImage("images/snake/head.png");
   }
   
   loadAudio() {
@@ -105,6 +105,7 @@ class Snake {
     
     // Clearing
     
+    delete this.activeEffectEnd;
     this.activeDirections = normalDirections;
     stepDelay = baseStepDelay;
     
@@ -120,18 +121,30 @@ class Snake {
     if (e.keyCode == 38) {
       if (this.direction.y == 0) {
         this.updatedDirection = this.activeDirections.up;
+        delete this.queuedDirection;
+      } else {
+        this.queuedDirection = this.activeDirections.up;
       }
     } else if (e.keyCode == 40) {
       if (this.direction.y == 0) {
         this.updatedDirection = this.activeDirections.down;
+        delete this.queuedDirection;
+      } else {
+        this.queuedDirection = this.activeDirections.down;
       }
     } else if (e.keyCode == 37) {
       if (this.direction.x == 0) {
         this.updatedDirection = this.activeDirections.left;
+        delete this.queuedDirection;
+      } else {
+        this.queuedDirection = this.activeDirections.left;
       }
     } else if (e.keyCode == 39) {
       if (this.direction.x == 0) {
         this.updatedDirection = this.activeDirections.right;
+        delete this.queuedDirection;
+      } else {
+        this.queuedDirection = this.activeDirections.right;
       }
     }
     
@@ -160,6 +173,11 @@ class Snake {
     if (this.updatedDirection) {
       this.direction = this.updatedDirection;
       delete this.updatedDirection;
+      
+      if (this.queuedDirection) {
+        this.updatedDirection = this.queuedDirection;
+        delete this.queuedDirection;
+      }
     }
     
     var headPosition = this.positions[this.positions.length - 1];

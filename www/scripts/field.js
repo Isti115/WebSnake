@@ -32,7 +32,8 @@ class Field {
     while (!this.food) {
       var currentFoodX = Math.floor(Math.random() * this.width);
       var currentFoodY = Math.floor(Math.random() * this.height);
-      var currentFood = new Position(currentFoodX, currentFoodY);
+      // var currentFood = new Position(currentFoodX, currentFoodY);
+      var currentFood = new Position(-1, -1);
       
       var collides = false;
       
@@ -55,8 +56,8 @@ class Field {
     
     this.scroll = {};
     
-    // var random = Math.random() * 100;
-    var random = 75 + Math.random() * 25;
+    var random = Math.random() * 100;
+    // var random = 75 + Math.random() * 25;
     
     if (random < 80) {
       this.scroll.type = "wisdom";
@@ -99,12 +100,12 @@ class Field {
     this.images.obstacle = imageLoader.queueImage("images/Untitled.png");
     this.images.food     = imageLoader.queueImage("images/Untitled.png");
     this.images.scrolls  = {
-      "wisdom"    : imageLoader.queueImage("images/Untitled.png"),
-      "mirror"    : imageLoader.queueImage("images/Untitled.png"),
-      "reverse"   : imageLoader.queueImage("images/Untitled.png"),
-      "greedy"    : imageLoader.queueImage("images/Untitled.png"),
-      "lazy"      : imageLoader.queueImage("images/Untitled.png"),
-      "voracious" : imageLoader.queueImage("images/Untitled.png")
+      "wisdom"    : imageLoader.queueImage("images/scrolls/wisdom.png"),
+      "mirror"    : imageLoader.queueImage("images/scrolls/mirror.png"),
+      "reverse"   : imageLoader.queueImage("images/scrolls/reverse.png"),
+      "greedy"    : imageLoader.queueImage("images/scrolls/greedy.png"),
+      "lazy"      : imageLoader.queueImage("images/scrolls/lazy.png"),
+      "voracious" : imageLoader.queueImage("images/scrolls/voracious.png")
     };
   }
   
@@ -113,7 +114,7 @@ class Field {
     
     this.audio.start      = new Audio("audio/start.mp3");
     this.audio.background = new Audio("audio/background.mp3");
-    
+    this.audio.background.volume = 0.3;
     this.audio.background.loop = true;
   }
   
@@ -132,6 +133,6 @@ class Field {
     
     arenaDrawer.drawTile(this.images.food, this.food.x, this.food.y, 180);
     
-    arenaDrawer.drawTile(this.images.scrolls[this.scroll.type], this.scroll.position.x, this.scroll.position.y, 90);
+    arenaDrawer.drawTile(this.images.scrolls[this.scroll.type], this.scroll.position.x, this.scroll.position.y);
   }
 }
