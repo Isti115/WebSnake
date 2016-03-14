@@ -1,13 +1,55 @@
-var directions = {
+var normalDirections = {
   "up": new Position(0, -1),
   "down": new Position(0, 1),
   "left": new Position(-1, 0),
   "right": new Position(1, 0)
 };
 
+var mirroredDirections = {
+  "down": new Position(0, -1),
+  "up": new Position(0, 1),
+  "right": new Position(-1, 0),
+  "left": new Position(1, 0)
+};
+
+var effects = {
+  "wisdom"    : function(snake) {
+    snake.length += 4;
+  },
+  "mirror"    : function(snake) {
+    snake.activeDirections = mirroredDirections;
+  },
+  "reverse"   : function(snake) {
+    snake.direction = new Position(
+      snake.positions[0].x - snake.positions[1].x,
+      snake.positions[0].y - snake.positions[1].y
+    );
+    snake.positions.reverse();
+  },
+  "greedy"    : function(snake) {
+    stepDelay = baseStepDelay / 1.5;
+    
+    snake.activeEffectEnd = new Date();
+    snake.activeEffectEnd.setSeconds(snake.activeEffectEnd.getSeconds() + 5);
+  },
+  "lazy"      : function(snake) {
+    stepDelay = baseStepDelay * 1.5;
+    
+    snake.activeEffectEnd = new Date();
+    snake.activeEffectEnd.setSeconds(snake.activeEffectEnd.getSeconds() + 5);
+  },
+  "voracious" : function(snake) {
+    snake.length += 10;
+  },
+  "clear" : function(snake) {
+    
+  }
+};
+
 class Snake {
   constructor(field) {
-    this.direction = directions.right;
+    this.activeDirections = normalDirections;
+    this.direction = this.activeDirections.right;
     
     this.positions = [];
     
@@ -38,7 +80,7 @@ class Snake {
                       "-90" : imageLoader.queueImage("images/bodyTurnLeft.png"),
                        "90" : imageLoader.queueImage("images/bodyTurnRight.png")
     };
-    this.images.neck = imageLoader.queueImage("images/neck.png");
+    this.images.neck        = imageLoader.queueImage("images/neck.png");
     this.images.neckTurn    = {
                       "-90" : imageLoader.queueImage("images/neckTurnLeft.png"),
                        "90" : imageLoader.queueImage("images/neckTurnRight.png")
@@ -46,27 +88,57 @@ class Snake {
     this.images.head        = imageLoader.queueImage("images/head.png");
   }
   
+  applyEffect(effectName) {
+    console.log(`Applying: ${effectName}`);
+    this.activeEffect = effectName;
+    
+    // Clearing
+    
+    this.activeDirections = normalDirections;
+    stepDelay = baseStepDelay;
+    
+    effects[effectName](this);
+  }
+  
   keyDown(e) {
     if (e.keyCode == 38) {
       if (this.direction.y == 0) {
-        this.updatedDirection = directions.up;
+        this.updatedDirection = this.activeDirections.up;
       }
     } else if (e.keyCode == 40) {
       if (this.direction.y == 0) {
-        this.updatedDirection = directions.down;
+        this.updatedDirection = this.activeDirections.down;
       }
     } else if (e.keyCode == 37) {
       if (this.direction.x == 0) {
-        this.updatedDirection = directions.left;
+        this.updatedDirection = this.activeDirections.left;
       }
     } else if (e.keyCode == 39) {
       if (this.direction.x == 0) {
-        this.updatedDirection = directions.right;
+        this.updatedDirection = this.activeDirections.right;
       }
+    }
+    
+    // Cheats
+    
+    if (e.keyCode == 192) {
+      dieded = false;
+      
+      main();
+      // mainInterval = setInterval(main, stepDelay);
+    }
+    
+    if (e.keyCode == 82) {
+      snake.applyEffect("reverse");
     }
   }
   
   update() {
+    if (this.activeEffectEnd && this.activeEffectEnd < new Date()) {
+      this.applyEffect("clear");
+      delete this.activeEffectEnd;
+    }
+    
     // Updating direction
     
     if (this.updatedDirection) {
@@ -80,25 +152,22 @@ class Snake {
     
     var nextHeadPosition = Position.add(headPosition, this.direction);
     
-    var collides = false;
-    
-    if (
+    var collides = (
       nextHeadPosition.x < 0 || nextHeadPosition.x > field.width - 1 ||
       nextHeadPosition.y < 0 || nextHeadPosition.y > field.height - 1
-    ) {
-      collides = true;
-    }
-    
+    );
+
     for (var i = 0; i < field.obstacles.length && !collides; i++) {
       collides = field.obstacles[i].equals(nextHeadPosition);
     }
-    for (var i = 0; i < this.positions.length && !collides; i++) {
+    for (var i = 1; i < this.positions.length && !collides; i++) {
       collides = this.positions[i].equals(nextHeadPosition);
     }
     
     if (collides) {
-      clearInterval(mainInterval);
+      // clearInterval(mainInterval);
       dieded = true;
+      console.log("%cSnek dieded -> Game ended.", "color:red;font-size:20px;");
       return;
     }
     
@@ -119,6 +188,11 @@ class Snake {
     if (headPosition.equals(field.food)) {
       this.length++;
       field.generateFood();
+    }
+    
+    if (headPosition.equals(field.scroll.position)) {
+      this.applyEffect(field.scroll.type);
+      field.generateScroll();
     }
   }
   
