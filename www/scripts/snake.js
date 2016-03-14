@@ -27,14 +27,23 @@ class Snake {
   loadImages() {
     this.images = {};
     
-    this.images.tail        = imageLoader.queueImage("images/Untitled.png");
-    this.images.preTail     = imageLoader.queueImage("images/Untitled.png");
-    this.images.preTailTurn = imageLoader.queueImage("images/Untitled.png");
-    this.images.body        = imageLoader.queueImage("images/Untitled.png");
-    this.images.bodyTurn    = imageLoader.queueImage("images/Untitled.png");
-    this.images.neck        = imageLoader.queueImage("images/Untitled.png");
-    this.images.neckTurn    = imageLoader.queueImage("images/Untitled.png");
-    this.images.head        = imageLoader.queueImage("images/Untitled.png");
+    this.images.tail        = imageLoader.queueImage("images/tail.png");
+    this.images.preTail     = imageLoader.queueImage("images/preTail.png");
+    this.images.preTailTurn = {
+                      "-90" : imageLoader.queueImage("images/preTailTurnLeft.png"),
+                       "90" : imageLoader.queueImage("images/preTailTurnRight.png")
+    };
+    this.images.body        = imageLoader.queueImage("images/body.png");
+    this.images.bodyTurn    = {
+                      "-90" : imageLoader.queueImage("images/bodyTurnLeft.png"),
+                       "90" : imageLoader.queueImage("images/bodyTurnRight.png")
+    };
+    this.images.neck = imageLoader.queueImage("images/neck.png");
+    this.images.neckTurn    = {
+                      "-90" : imageLoader.queueImage("images/neckTurnLeft.png"),
+                       "90" : imageLoader.queueImage("images/neckTurnRight.png")
+    };
+    this.images.head        = imageLoader.queueImage("images/head.png");
   }
   
   keyDown(e) {
@@ -72,6 +81,13 @@ class Snake {
     var nextHeadPosition = Position.add(headPosition, this.direction);
     
     var collides = false;
+    
+    if (
+      nextHeadPosition.x < 0 || nextHeadPosition.x > field.width - 1 ||
+      nextHeadPosition.y < 0 || nextHeadPosition.y > field.height - 1
+    ) {
+      collides = true;
+    }
     
     for (var i = 0; i < field.obstacles.length && !collides; i++) {
       collides = field.obstacles[i].equals(nextHeadPosition);
@@ -133,8 +149,12 @@ class Snake {
         Position.getRotation(preTailPosition, firstBodyPosition)
       );
     } else {
+      let firstAngle = Position.getRotation(tailPosition, preTailPosition);
+      let secondAngle = Position.getRotation(preTailPosition, firstBodyPosition);
+      let relativeAngle = (firstAngle - secondAngle + 360) % 360 - 180;
+      
       arenaDrawer.drawTile(
-        this.images.preTailTurn,
+        this.images.preTailTurn[relativeAngle],
         ...preTailPosition.toArray(),
         Position.getRotation(preTailPosition, firstBodyPosition)
       );
@@ -143,11 +163,23 @@ class Snake {
     // Body
     
     for (var i = 2; i < this.positions.length - 2; i++) {
-      arenaDrawer.drawTile(
-        this.images.body,
-        ...this.positions[i].toArray(),
-        Position.getRotation(this.positions[i], this.positions[i + 1])
-      );
+      if (this.positions[i + 1].x - this.positions[i].x == this.positions[i].x - this.positions[i - 1].x ) {
+        arenaDrawer.drawTile(
+          this.images.body,
+          ...this.positions[i].toArray(),
+          Position.getRotation(this.positions[i], this.positions[i + 1])
+        );
+      } else {
+        let firstAngle = Position.getRotation(this.positions[i - 1], this.positions[i]);
+        let secondAngle = Position.getRotation(this.positions[i], this.positions[i + 1]);
+        let relativeAngle = (firstAngle - secondAngle + 360) % 360 - 180;
+        
+        arenaDrawer.drawTile(
+          this.images.bodyTurn[relativeAngle],
+          ...this.positions[i].toArray(),
+          Position.getRotation(this.positions[i], this.positions[i + 1])
+        );
+      }
     }
     
     // Neck
@@ -159,8 +191,12 @@ class Snake {
         Position.getRotation(neckPosition, headPosition)
       );
     } else {
+      let firstAngle = Position.getRotation(lastBodyPosition, neckPosition);
+      let secondAngle = Position.getRotation(neckPosition, headPosition);
+      let relativeAngle = (firstAngle - secondAngle + 360) % 360 - 180;
+      
       arenaDrawer.drawTile(
-        this.images.neckTurn,
+        this.images.neckTurn[relativeAngle],
         ...neckPosition.toArray(),
         Position.getRotation(neckPosition, headPosition)
       );

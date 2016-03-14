@@ -11,7 +11,7 @@ var obstacleCount = 4;
 var hudDrawer, arenaDrawer;
 var field, snake;
 
-var stepDelay = 200;
+var stepDelay = 150;
 var mainInterval;
 
 var dieded = false;

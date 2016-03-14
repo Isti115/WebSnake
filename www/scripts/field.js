@@ -53,7 +53,14 @@ class Field {
     
     this.images.obstacle = imageLoader.queueImage("images/Untitled.png");
     this.images.food     = imageLoader.queueImage("images/Untitled.png");
-    this.images.scroll   = imageLoader.queueImage("images/Untitled.png");
+    this.images.scrolls  = {
+      "wisdom"    : imageLoader.queueImage("images/Untitled.png"),
+      "mirror"    : imageLoader.queueImage("images/Untitled.png"),
+      "reverse"   : imageLoader.queueImage("images/Untitled.png"),
+      "greedy"    : imageLoader.queueImage("images/Untitled.png"),
+      "lazy"      : imageLoader.queueImage("images/Untitled.png"),
+      "voracious" : imageLoader.queueImage("images/Untitled.png")
+    }
   }
   
   keyDown(e) {
