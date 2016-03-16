@@ -2,13 +2,17 @@
 
 window.addEventListener("load", init, false);
 
-function disableArrows(e) {
+function windowKeyDown(e) {
   if ([37, 38, 39, 40].indexOf(e.keyCode) != -1) {
     e.preventDefault();
   }
+  
+  if (e.keyCode == 13) {
+    start();
+  }
 }
 
-window.addEventListener("keydown", disableArrows, false);
+window.addEventListener("keydown", windowKeyDown, false);
 
 var gameContainer;
 var scoreDisplay;
@@ -128,7 +132,7 @@ function draw() {
   context.fillStyle = "#000000";
   
   if (snake.died) {
-    scoreDisplay.innerHTML = `End: ${snake.length - 4}`;
+    scoreDisplay.innerHTML = `Game over: ${snake.length - 4}`;
   } else {
     scoreDisplay.innerHTML = `Score: ${snake.length - 4}`;
   }

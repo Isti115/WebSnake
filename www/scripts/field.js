@@ -14,7 +14,7 @@ class Field {
       var currentObstacleY = Math.floor(Math.random() * this.height);
       var currentObstacle = new Position(currentObstacleX, currentObstacleY);
       
-      var collides = currentObstacle.y == this.entrance && currentObstacle.x < 5;
+      var collides = currentObstacle.y == this.entrance && currentObstacle.x < 7;
       
       for (var i = 0; i < this.obstacles.length && !collides; i++) {
         collides = this.obstacles[i].equals(currentObstacle);
@@ -97,7 +97,7 @@ class Field {
   loadImages() {
     this.images = {};
     
-    this.images.obstacle = imageLoader.queueImage("images/Untitled.png");
+    this.images.obstacle = imageLoader.queueImage("images/Untitled2.png");
     this.images.food     = imageLoader.queueImage("images/Untitled.png");
     this.images.scrolls  = {
       "wisdom"    : imageLoader.queueImage("images/scrolls/wisdom.png"),

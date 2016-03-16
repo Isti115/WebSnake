@@ -101,7 +101,6 @@ class Snake {
   
   applyEffect(effectName) {
     console.log(`Applying: ${effectName}`);
-    this.activeEffect = effectName;
     
     // Clearing
     
@@ -113,6 +112,7 @@ class Snake {
       return;
     }
     
+    this.activeEffect = effectName;
     this.audio.effects[effectName].play();
     effects[effectName](this);
   }
@@ -194,7 +194,7 @@ class Snake {
     for (var i = 0; i < field.obstacles.length && !collides; i++) {
       collides = field.obstacles[i].equals(nextHeadPosition);
     }
-    for (var i = 1; i < this.positions.length && !collides; i++) {
+    for (var i = (this.length > this.positions.length ? 0 : 1); i < this.positions.length && !collides; i++) {
       collides = this.positions[i].equals(nextHeadPosition);
     }
     
