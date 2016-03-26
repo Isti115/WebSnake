@@ -16,14 +16,15 @@ window.addEventListener("keydown", windowKeyDown, false);
 
 var gameContainer;
 var scoreDisplay;
-var canvas, context;
+var backgroundCanvas, backgroundContext;
+var gameCanvas, gameContext;
 
 var width = 640, height = 480;
 var tileSize = 32;
 
 var obstacleCount = 4;
 
-var hudDrawer, arenaDrawer;
+var backgroundDrawer, hudDrawer, arenaDrawer;
 var field, snake;
 
 var countdownStatus;
@@ -39,22 +40,25 @@ function init() {
 function start() {
   gameContainer = document.getElementById("gameContainer");
   scoreDisplay = document.getElementById("scoreDisplay");
-  canvas = document.getElementById("gameCanvas");
+  backgroundCanvas = document.getElementById("backgroundCanvas");
+  gameCanvas = document.getElementById("gameCanvas");
   
   width = parseInt(document.getElementById("widthInput").value) * 32;
   height = (parseInt(document.getElementById("heightInput").value) + 1) * 32;
   obstacleCount = parseInt(document.getElementById("obstacleCountInput").value);
   
-  canvas.width = width;
-  canvas.height = height;
+  gameCanvas.width = width;
+  gameCanvas.height = height;
   
-  context = canvas.getContext("2d");
+  backgroundContext = backgroundCanvas.getContext("2d");
+  gameContext = gameCanvas.getContext("2d");
   
   gameContainer.addEventListener("keydown", keyDown, false);
   gameContainer.focus();
   
-  hudDrawer = new TileDrawer(context, 0, 0, 32);
-  arenaDrawer = new TileDrawer(context, 0, 32, 32);
+  backgroundDrawer = new TileDrawer(backgroundContext, 0, 0, 32);
+  hudDrawer = new TileDrawer(gameContext, 0, 0, 32);
+  arenaDrawer = new TileDrawer(gameContext, 0, 32, 32);
   
   field = new Field(width / tileSize, (height - arenaDrawer.offsetY) / tileSize, obstacleCount);
   snake = new Snake();
@@ -70,7 +74,14 @@ function start() {
   field.generateScroll();
 
   countdownStatus = 3;
-  imageLoader.processQueue(countdown);
+  imageLoader.processQueue(ready);
+}
+
+function ready() {
+  backgroundCanvas.width = field.width * tileSize;
+  backgroundCanvas.height = field.height * tileSize;
+  field.generateBackground();
+  countdown();
 }
 
 function countdown() {
@@ -78,11 +89,11 @@ function countdown() {
     field.audio.start.play();
   }
   
-  context.font = "30px Courier New";
-  context.fillStyle = "#000000";
+  gameContext.font = "30px Courier New";
+  gameContext.fillStyle = "#000000";
   
-  context.clearRect(0, 0, width, height);
-  context.fillText(`Game begins in: ${countdownStatus}`, 10, 25);
+  gameContext.clearRect(0, 0, width, height);
+  gameContext.fillText(`Game begins in: ${countdownStatus}`, 10, 25);
   
   countdownStatus--;
   if (countdownStatus >= 0) {
@@ -121,15 +132,15 @@ function update() {
 }
 
 function draw() {
-  context.clearRect(0, 0, width, height);
-  context.fillStyle = "#aaff00";
-  context.fillRect(0, 0, width, 32);
+  gameContext.clearRect(0, 0, width, height);
+  gameContext.fillStyle = "#aaff00";
+  gameContext.fillRect(0, 0, width, 32);
   
   field.draw();
   snake.draw();
   
-  context.font = "30px Courier New";
-  context.fillStyle = "#000000";
+  gameContext.font = "30px Courier New";
+  gameContext.fillStyle = "#000000";
   
   if (snake.died) {
     scoreDisplay.innerHTML = `Game over: ${snake.length - 4}`;
@@ -139,6 +150,6 @@ function draw() {
   
   if (snake.activeEffect) {
     hudDrawer.drawTile(field.images.scrolls[snake.activeEffect], 3.75, 0);
-    context.fillText(`Scroll: ${snake.activeEffect}`, 5, 25);
+    gameContext.fillText(`Scroll: ${snake.activeEffect}`, 5, 25);
   }
 }

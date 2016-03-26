@@ -8,6 +8,16 @@ class Field {
     this.obstacles = [];
   }
   
+  generateBackground() {
+    for (var y = 0; y < this.height; y++) {
+      for (var x = 0; x < this.width; x++) {
+        var randomBackgroundTile = Math.floor(Math.random() * this.images.background.length);
+        var randomRotation = Math.floor(Math.random() * 4) * 90;
+        backgroundDrawer.drawTile(this.images.background[randomBackgroundTile], x, y, randomRotation);
+      }
+    }
+  }
+  
   generateObstacles(obstacleCount) {
     while (this.obstacles.length < obstacleCount) {
       var currentObstacleX = Math.floor(Math.random() * this.width);
@@ -30,8 +40,8 @@ class Field {
     delete this.food;
     
     while (!this.food) {
-      var currentFoodX = Math.floor(Math.random() * this.width);
-      var currentFoodY = Math.floor(Math.random() * this.height);
+      // var currentFoodX = Math.floor(Math.random() * this.width);
+      // var currentFoodY = Math.floor(Math.random() * this.height);
       // var currentFood = new Position(currentFoodX, currentFoodY);
       var currentFood = new Position(-1, -1);
       
@@ -56,18 +66,18 @@ class Field {
     
     this.scroll = {};
     
-    var random = Math.random() * 100;
-    // var random = 75 + Math.random() * 25;
+    var randomScrollType = Math.random() * 100;
+    // var randomScrollType = 75 + Math.random() * 25;
     
-    if (random < 80) {
+    if (randomScrollType < 80) {
       this.scroll.type = "wisdom";
-    } else if (random < 84) {
+    } else if (randomScrollType < 84) {
       this.scroll.type = "mirror";
-    } else if (random < 88) {
+    } else if (randomScrollType < 88) {
       this.scroll.type = "reverse";
-    } else if (random < 92) {
+    } else if (randomScrollType < 92) {
       this.scroll.type = "greedy";
-    } else if (random < 96) {
+    } else if (randomScrollType < 96) {
       this.scroll.type = "lazy";
     } else {
       this.scroll.type = "voracious";
@@ -97,8 +107,16 @@ class Field {
   loadImages() {
     this.images = {};
     
-    this.images.obstacle = imageLoader.queueImage("images/Untitled2.png");
+    this.images.background = [
+      imageLoader.queueImage("images/board/background/1.png"),
+      imageLoader.queueImage("images/board/background/2.png"),
+      imageLoader.queueImage("images/board/background/3.png")
+    ];
+    
+    this.images.obstacle = imageLoader.queueImage("images/board/obstacle.png");
+    
     this.images.food     = imageLoader.queueImage("images/Untitled.png");
+    
     this.images.scrolls  = {
       "wisdom"    : imageLoader.queueImage("images/scrolls/wisdom.png"),
       "mirror"    : imageLoader.queueImage("images/scrolls/mirror.png"),
@@ -127,6 +145,8 @@ class Field {
   }
   
   draw() {
+    arenaDrawer.drawImage(backgroundCanvas, 0, 0);
+    
     for (var currentObstacle of this.obstacles) {
       arenaDrawer.drawTile(this.images.obstacle, currentObstacle.x, currentObstacle.y);
     }

@@ -24,7 +24,11 @@ input[type="number"] {
   outline: none;
 }
 
-canvas {
+canvas#backgroundCanvas {
+  display: none;
+}
+
+canvas#gameCanvas {
   /*width: 640px;*/
   height: 480px;
   

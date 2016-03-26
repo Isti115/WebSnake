@@ -20,4 +20,8 @@ class TileDrawer {
     
     this.context.restore();
   }
+  
+  drawImage(image, x, y) {
+    this.context.drawImage(image, this.offsetX + x, this.offsetY + y);
+  }
 }
