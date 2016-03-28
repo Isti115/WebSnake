@@ -154,7 +154,6 @@ class Snake {
       this.died = false;
       
       main();
-      // mainInterval = setInterval(main, stepDelay);
     }
     
     if (e.keyCode == 82) {
@@ -199,7 +198,6 @@ class Snake {
     }
     
     if (collides) {
-      // clearInterval(mainInterval);
       field.audio.background.pause();
       this.audio.end.play();
       this.died = true;

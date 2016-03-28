@@ -9,6 +9,23 @@ class Field {
   }
   
   generateBackground() {
+    backgroundContext.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+    
+    backgroundDrawer.drawTile(this.images.corner, -1, -1, 0);
+    backgroundDrawer.drawTile(this.images.corner, this.width, -1, 90);
+    backgroundDrawer.drawTile(this.images.corner, this.width, this.height, 180);
+    backgroundDrawer.drawTile(this.images.corner, -1, this.height, 270);
+    
+    for (var x = 0; x < this.width; x++) {
+      backgroundDrawer.drawTile(this.images.side, x, -1, 90);
+      backgroundDrawer.drawTile(this.images.side, x, this.height, -90);
+    }
+    
+    for (var y = 0; y < this.height; y++) {
+      backgroundDrawer.drawTile(this.images.side, -1, y, 0);
+      backgroundDrawer.drawTile(this.images.side, this.width, y, 180);
+    }
+    
     for (var y = 0; y < this.height; y++) {
       for (var x = 0; x < this.width; x++) {
         var randomBackgroundTile = Math.floor(Math.random() * this.images.background.length);
@@ -108,22 +125,30 @@ class Field {
     this.images = {};
     
     this.images.background = [
-      imageLoader.queueImage("images/board/background/1.png"),
-      imageLoader.queueImage("images/board/background/2.png"),
-      imageLoader.queueImage("images/board/background/3.png")
+      imageLoader.queueImage("images/board/background/tile01.png"),
+      imageLoader.queueImage("images/board/background/tile02.png"),
+      imageLoader.queueImage("images/board/background/tile03.png"),
+      imageLoader.queueImage("images/board/background/tile04.png"),
+      imageLoader.queueImage("images/board/background/tile05.png"),
+      imageLoader.queueImage("images/board/background/tile06.png"),
+      imageLoader.queueImage("images/board/background/tile07.png"),
+      imageLoader.queueImage("images/board/background/tile08.png")
     ];
     
+    this.images.side     = imageLoader.queueImage("images/board/background/border_side.png");
+    this.images.corner   = imageLoader.queueImage("images/board/background/border_corner.png");
+
     this.images.obstacle = imageLoader.queueImage("images/board/obstacle.png");
     
     this.images.food     = imageLoader.queueImage("images/Untitled.png");
     
     this.images.scrolls  = {
-      "wisdom"    : imageLoader.queueImage("images/scrolls/wisdom.png"),
-      "mirror"    : imageLoader.queueImage("images/scrolls/mirror.png"),
-      "reverse"   : imageLoader.queueImage("images/scrolls/reverse.png"),
-      "greedy"    : imageLoader.queueImage("images/scrolls/greedy.png"),
-      "lazy"      : imageLoader.queueImage("images/scrolls/lazy.png"),
-      "voracious" : imageLoader.queueImage("images/scrolls/voracious.png")
+      "wisdom"    : imageLoader.queueImage("images/scrolls/colour_wisdom.png"),
+      "mirror"    : imageLoader.queueImage("images/scrolls/colour_mirror.png"),
+      "reverse"   : imageLoader.queueImage("images/scrolls/colour_reverse.png"),
+      "greedy"    : imageLoader.queueImage("images/scrolls/colour_greedy.png"),
+      "lazy"      : imageLoader.queueImage("images/scrolls/colour_lazy.png"),
+      "voracious" : imageLoader.queueImage("images/scrolls/colour_voracious.png")
     };
   }
   
@@ -145,13 +170,13 @@ class Field {
   }
   
   draw() {
-    arenaDrawer.drawImage(backgroundCanvas, 0, 0);
+    arenaDrawer.drawImage(backgroundCanvas, -backgroundDrawer.tileSize, -backgroundDrawer.tileSize);
     
     for (var currentObstacle of this.obstacles) {
       arenaDrawer.drawTile(this.images.obstacle, currentObstacle.x, currentObstacle.y);
     }
     
-    arenaDrawer.drawTile(this.images.food, this.food.x, this.food.y, 180);
+    // arenaDrawer.drawTile(this.images.food, this.food.x, this.food.y, 180);
     
     arenaDrawer.drawTile(this.images.scrolls[this.scroll.type], this.scroll.position.x, this.scroll.position.y);
   }
