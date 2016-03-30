@@ -14,6 +14,10 @@ function windowKeyDown(e) {
   }
 }
 
+function changeRendering() {
+  gameCanvas.style.imageRendering = gameCanvas.style.imageRendering == "pixelated" ? "auto" : "pixelated";
+}
+
 window.addEventListener("keydown", windowKeyDown, false);
 
 var gameContainer;
@@ -58,11 +62,14 @@ function start() {
   
   gameCanvas.width = (width + 2) * tileSize;
   gameCanvas.height = (height + 1 + 2) * tileSize;
+  gameCanvas.style.width = (width + 2) * tileSize + "px";
+  gameCanvas.style.height = (height + 1 + 2) * tileSize + "px";
   
   backgroundContext = backgroundCanvas.getContext("2d");
   gameContext = gameCanvas.getContext("2d");
   
   gameContainer.addEventListener("keydown", keyDown, false);
+  gameContainer.addEventListener("click", changeRendering, false);
   gameContainer.focus();
   
   backgroundDrawer = new TileDrawer(backgroundContext, tileSize, tileSize, tileSize);
