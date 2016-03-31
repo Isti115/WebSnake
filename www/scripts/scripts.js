@@ -47,7 +47,7 @@ var tileSize = 32;
 var obstacleCount = 4;
 
 var backgroundDrawer, hudDrawer, arenaDrawer;
-var field, snake;
+var field, snake, snake2;
 
 var countdownStatus;
 
@@ -101,12 +101,16 @@ function start() {
   
   field = new Field(width, height, obstacleCount);
   snake = new Snake();
+  snake2 = new Snake();
+  snake2.positions = [new Position(0, 1), new Position(1, 1), new Position(2, 1), new Position(3, 1)];
   
   field.loadImages();
   snake.loadImages();
+  snake2.loadImages();
   
   field.loadAudio();
   snake.loadAudio();
+  snake2.loadAudio();
   
   field.generateObstacles(obstacleCount);
   field.generateFood();
@@ -174,11 +178,13 @@ function main() {
 function keyDown(e) {
   field.keyDown(e);
   snake.keyDown(e);
+  snake2.keyDown(e);
 }
 
 function update() {
   field.update();
   snake.update();
+  snake2.update();
 }
 
 function draw() {
@@ -189,6 +195,7 @@ function draw() {
   
   field.draw();
   snake.draw();
+  snake2.draw();
   
   gameContext.font = "30px Courier New";
   // gameContext.fillStyle = "#000000";
