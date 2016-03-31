@@ -219,7 +219,7 @@ class Snake {
     
     headPosition.move(this.direction);
     
-    if (headPosition.equals(field.food)) {
+    if (activeFood && headPosition.equals(field.food)) {
       this.audio.eat.play();
       this.length++;
       field.generateFood();

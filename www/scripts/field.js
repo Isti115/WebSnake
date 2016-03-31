@@ -37,8 +37,8 @@ class Field {
   
   generateObstacles(obstacleCount) {
     while (this.obstacles.length < obstacleCount) {
-      var currentObstacleX = Math.floor(Math.random() * this.width);
-      var currentObstacleY = Math.floor(Math.random() * this.height);
+      var currentObstacleX = Math.floor(Math.random() * (this.width - 2)) + 1;
+      var currentObstacleY = Math.floor(Math.random() * (this.height - 2)) + 1;
       var currentObstacle = new Position(currentObstacleX, currentObstacleY);
       
       var collides = currentObstacle.y == this.entrance && currentObstacle.x < 7;
@@ -57,10 +57,10 @@ class Field {
     delete this.food;
     
     while (!this.food) {
-      // var currentFoodX = Math.floor(Math.random() * this.width);
-      // var currentFoodY = Math.floor(Math.random() * this.height);
-      // var currentFood = new Position(currentFoodX, currentFoodY);
-      var currentFood = new Position(-1, -1);
+      var currentFoodX = Math.floor(Math.random() * this.width);
+      var currentFoodY = Math.floor(Math.random() * this.height);
+      var currentFood = new Position(currentFoodX, currentFoodY);
+      // var currentFood = new Position(-1, -1);
       
       var collides = false;
       
@@ -176,7 +176,9 @@ class Field {
       arenaDrawer.drawTile(this.images.obstacle, currentObstacle.x, currentObstacle.y);
     }
     
-    // arenaDrawer.drawTile(this.images.food, this.food.x, this.food.y, 180);
+    if (activeFood) {
+      arenaDrawer.drawTile(this.images.food, this.food.x, this.food.y, 180);
+    }
     
     arenaDrawer.drawTile(this.images.scrolls[this.scroll.type], this.scroll.position.x, this.scroll.position.y);
   }

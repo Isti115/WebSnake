@@ -12,6 +12,22 @@ function windowKeyDown(e) {
   if (e.keyCode == 13) {
     start();
   }
+  
+  if (e.keyCode == 46) {
+    snake.died = true;
+  }
+  
+  if (e.keyCode == 106) {
+    stepDelay = baseStepDelay = 150;
+  }
+  
+  if (e.keyCode == 107) {
+    stepDelay = baseStepDelay /= 1.25;
+  }
+  
+  if (e.keyCode == 109) {
+    stepDelay = baseStepDelay *= 1.25;
+  }
 }
 
 function changeRendering() {
@@ -40,8 +56,15 @@ var stepDelay = baseStepDelay;
 
 var gameInProgress = false;
 
+var activeFood = false;
+
 function init() {
   document.getElementById("startButton").addEventListener("click", start, false);
+  document.getElementById("preset").addEventListener("click", function() {
+    document.getElementById("widthInput").value = 35;
+    document.getElementById("heightInput").value = 20;
+    document.getElementById("obstacleCountInput").value = 10;
+  }, false);
 }
 
 function start() {
@@ -89,6 +112,7 @@ function start() {
   field.generateFood();
   field.generateScroll();
 
+  stepDelay = baseStepDelay;
   countdownStatus = 3;
   imageLoader.processQueue(ready);
 }
@@ -105,11 +129,16 @@ function countdown() {
     field.audio.start.play();
   }
   
+  gameContext.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+  draw()
+  
+  gameContext.fillStyle = "rgba(255, 255, 255, 0.5)";
+  gameContext.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+  
   // gameContext.font = "30px Courier New";
   gameContext.font = `${gameCanvas.height}px Courier New`;
   gameContext.fillStyle = "#000000";
   
-  gameContext.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
   // gameContext.fillText(`Game begins in: ${countdownStatus}`, 10, 25);
   gameContext.textBaseline = 'middle';
   gameContext.textAlign = "center";
@@ -154,14 +183,16 @@ function update() {
 
 function draw() {
   gameContext.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-  gameContext.fillStyle = "#aaff00";
+  // gameContext.fillStyle = "#aaff00";
+  gameContext.fillStyle = "#9A7D4B";
   gameContext.fillRect(0, 0, gameCanvas.width, 32);
   
   field.draw();
   snake.draw();
   
   gameContext.font = "30px Courier New";
-  gameContext.fillStyle = "#000000";
+  // gameContext.fillStyle = "#000000";
+  gameContext.fillStyle = "#F1D5A5";
   
   if (snake.died) {
     scoreDisplay.innerHTML = `Game over: ${snake.length - 4}`;
