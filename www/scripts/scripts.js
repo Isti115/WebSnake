@@ -202,7 +202,13 @@ function draw() {
   }
   
   if (snake.activeEffect) {
+    
+    if (snake.activeEffectEnd) {
+      gameContext.fillText(`Scroll:  ${snake.activeEffect} (${Math.floor((snake.activeEffectEnd - new Date()) / 1000)})`, 5, 25);
+    } else {
+      gameContext.fillText(`Scroll:  ${snake.activeEffect}`, 5, 25);
+    }
+
     hudDrawer.drawTile(field.images.scrolls[snake.activeEffect], 4, 0);
-    gameContext.fillText(`Scroll:  ${snake.activeEffect}`, 5, 25);
   }
 }
