@@ -83,8 +83,8 @@ class Field {
     
     this.scroll = {};
     
-    // var randomScrollType = Math.random() * 100;
-    var randomScrollType = 75 + Math.random() * 25;
+    var randomScrollType = Math.random() * 100;
+    // var randomScrollType = 75 + Math.random() * 25;
     
     if (randomScrollType < 80) {
       this.scroll.type = "wisdom";
